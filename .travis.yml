@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+  - "8"
+  - "9"
+  - "10"
+before_install:
+  - npm install
+  - git config --global user.email "travis@travis-ci.org"
+  - git config --global user.name "Travis CI"
+  - mkdir output
+  - cd output
+  - git remote add origin https://github.com/p1ho/nba-injuries.git
+  - git pull origin master
+  - cd ..
+script:
+  - node index
+after_success:
+  - cd output
+  - git add .
+  - git commit -m "Travis DB Update ($TRAVIS_BUILD_NUMBER)"
+  - git push origin master
