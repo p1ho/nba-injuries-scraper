@@ -10,7 +10,10 @@ var https = require('https')
 var httpsAgent = new https.Agent()
 httpsAgent.maxSockets = 3
 
-let finalDict = {}
+let finalDict = {
+  teams: {},
+  updated: undefined,
+}
 
 let t1 = new Date()
 
@@ -18,7 +21,7 @@ console.info("\nFetching Player Injury Urls...")
 console.log("\n===============================\n")
 let teamFetchQueue = []
 for (let [team, teamObj] of Object.entries(nbaTeamDict)) {
-  finalDict[team] = {}
+  finalDict['teams'][team] = {}
   teamFetchQueue.push(
     get({
       url: teamObj['roster-url'],
@@ -36,7 +39,7 @@ for (let [team, teamObj] of Object.entries(nbaTeamDict)) {
           let playerName = $(playerEl[i]).children().first().text()
           console.log(`Found Player: ${playerName} (${playerCode})`)
           let injuryUrl = baseUrl + playerCode + '-player-injuries'
-          finalDict[team][playerCode] = {
+          finalDict['teams'][team][playerCode] = {
             name: playerName,
             url: injuryUrl
           }
@@ -53,7 +56,7 @@ let playerFetchQueue = []
 Promise.all(teamFetchQueue).then( () => {
   console.info("\nFetching Player Injuries...")
   console.log("\n===============================\n")
-  for (let [team, players] of Object.entries(finalDict)) {
+  for (let [team, players] of Object.entries(finalDict['teams'])) {
     for (let [player, playerObj] of Object.entries(players)) {
       playerFetchQueue.push(
         get({
@@ -66,10 +69,10 @@ Promise.all(teamFetchQueue).then( () => {
             const injuriesEl = $('tbody .wisbb_fvStand')
             console.log(`(${injuriesEl.length} injuries) ${playerObj.name} `)
             const imgSrc = $('.wisfb_headshotImage.wisfb_bioLargeImg')[0].attribs.src
-            finalDict[team][player]['image'] = imgSrc
-            finalDict[team][player]['injuries'] = []
+            finalDict['teams'][team][player]['image'] = imgSrc
+            finalDict['teams'][team][player]['injuries'] = []
             for (let i = 0; i < injuriesEl.length; i++) {
-              finalDict[team][player]['injuries'].push({
+              finalDict['teams'][team][player]['injuries'].push({
                 date: $(injuriesEl[i]).children()[0].children[0].data,
                 injury: $(injuriesEl[i]).children()[1].children[0].data
               })
