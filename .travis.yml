@@ -1,7 +1,5 @@
 language: node_js
 node_js:
-  - "8"
-  - "9"
   - "10"
 before_install:
   - npm install
@@ -9,13 +7,16 @@ before_install:
   - git config --global user.name "Travis CI"
   - mkdir output
   - cd output
-  - git remote add origin https://github.com/p1ho/nba-injuries.git
+  - git init
+  - git remote add origin "https://p1ho:$GITHUB_TOKEN@github.com/p1ho/nba-injuries.git"
   - git pull origin master
   - cd ..
 script:
   - node index
 after_success:
   - cd output
+  - git status
   - git add .
   - git commit -m "Travis DB Update ($TRAVIS_BUILD_NUMBER)"
   - git push origin master
+  - cd ..
