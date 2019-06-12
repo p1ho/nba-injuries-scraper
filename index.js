@@ -68,7 +68,8 @@ Promise.all(teamFetchQueue).then( () => {
         }).then( $ => {
             const injuriesEl = $('tbody .wisbb_fvStand')
             console.log(`(${injuriesEl.length} injuries) ${playerObj.name} `)
-            const imgSrc = $('.wisfb_headshotImage.wisfb_bioLargeImg')[0].attribs.src
+            var imgSrc = $('.wisfb_headshotImage.wisfb_bioLargeImg')[0].attribs.src
+            imgSrc = imgSrc === "#" ? "https://b.fssta.com/uploads/application/bigboard/shared/default-headshot.png" : imgSrc
             finalDict['teams'][team][player]['image'] = imgSrc
             finalDict['teams'][team][player]['injuries'] = []
             for (let i = 0; i < injuriesEl.length; i++) {
