@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/p1ho/nba-injury-scraper.svg?branch=master)](https://travis-ci.com/p1ho/nba-injury-scraper)
+[![Build Status](https://travis-ci.com/p1ho/nba-injuries-scraper.svg?branch=master)](https://travis-ci.com/p1ho/nba-injuries-scraper)
 
 # NBA Injuries Scraper
 
